@@ -63,3 +63,8 @@ typings/
 # custom
 server/config/config.json
 .DS_Store
+haters/
+.next/
+.build/
+layout.md
+variables.env
