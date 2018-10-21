@@ -1,4 +1,5 @@
 import App, { Container } from "next/app";
+
 import Page from "../components/Page";
 
 export default class MyApp extends App {
