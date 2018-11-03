@@ -1,6 +1,6 @@
 const Query = {
   dogs(parent, args, ctx, info) {
-    return [{ name: "Snickers"}]
+    return global.dogs || [];
   }
 };
 
