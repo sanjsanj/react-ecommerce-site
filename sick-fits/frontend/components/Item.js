@@ -8,6 +8,8 @@ import PriceTag from "./styles/PriceTag";
 
 import formatMoney from "../lib/formatMoney";
 
+import DeleteItem from "./DeleteItem";
+
 export default class Item extends Component {
   static propTypes = {
     item: PropTypes.shape({
@@ -48,7 +50,8 @@ export default class Item extends Component {
           </Link>
 
           <button>Add to cart</button>
-          <button>Delete</button>
+          
+          <DeleteItem id={item.id}>Delete item</DeleteItem>
         </div>
       </ItemStyles>
     );
