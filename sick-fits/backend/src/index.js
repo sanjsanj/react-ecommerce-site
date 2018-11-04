@@ -1,18 +1,21 @@
-require("dotenv").config({ path: "variables.env" });
+require('dotenv').config({ path: 'variables.env' });
 
-const createServer = require("./createServer");
-const db = require("./db");
+const createServer = require('./createServer');
+const db = require('./db');
 
 const server = createServer();
+
+// TODO Use express middlware to handle cookies (JWT)
+// TODO Use express middlware to populate current user
 
 server.start(
   {
     cors: {
       credentials: true,
-      origin: process.env.FRONTEND_URL
-    }
+      origin: process.env.FRONTEND_URL,
+    },
   },
   data => {
-    console.log(`Server listening on port ${data.port}`);
+    console.log(`Server is listening on port http://localhost:${data.port}`);
   }
 );
