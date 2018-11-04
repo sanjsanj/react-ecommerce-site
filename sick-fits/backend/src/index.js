@@ -16,6 +16,6 @@ server.start(
     },
   },
   data => {
-    console.log(`Server is listening on port http://localhost:${data.port}`);
+    console.log(`Server is listening on port ${data.port}`);
   }
 );
