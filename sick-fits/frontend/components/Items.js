@@ -34,7 +34,6 @@ class Items extends Component {
   render() {
     return (
       <Center>
-        <p>Items!</p>
         <Query query={ALL_ITEMS_QUERY}>
           {({ data, error, loading }) => {
             if (error) return <p>Error: {error.message}</p>;

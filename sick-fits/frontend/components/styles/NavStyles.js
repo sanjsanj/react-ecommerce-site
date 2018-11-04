@@ -6,6 +6,7 @@ const NavStyles = styled.ul`
   display: flex;
   justify-self: end;
   font-size: 2rem;
+  border-bottom: 10px solid ${props => props.theme.black};
   a,
   button {
     padding: 1rem 3rem;
