@@ -25,17 +25,23 @@ const UPDATE_ITEM_MUTATION = gql`
     $title: String
     $description: String
     $price: Int
+    $image: String
+    $largeImage: String
   ) {
     updateItem(
       id: $id
       title: $title
       description: $description
       price: $price
+      image: $image
+      largeImage: $largeImage
     ) {
       id
       title
       description
       price
+      image
+      largeImage
     }
   }
 `;
@@ -64,6 +70,31 @@ class UpdateItem extends Component {
     return res;
   };
 
+  uploadFile = async e => {
+    console.log("Uploading file...");
+    const files = e.target.files;
+
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "sickfits");
+
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/sanj9000/image/upload",
+      {
+        method: "POST",
+        body: data
+      }
+    );
+
+    const file = await res.json();
+    console.log(file);
+
+    this.setState({
+      image: file.secure_url,
+      largeImage: file.eager[0].secure_url
+    });
+  };
+
   render() {
     return (
       <Query query={SINGLE_ITEM_QUERY} variables={{ id: this.props.id }}>
@@ -78,6 +109,25 @@ class UpdateItem extends Component {
                   <Error error={error} />
 
                   <fieldset disabled={loading} aria-busy={loading}>
+                    <label htmlFor="file">
+                      Image
+                      <input
+                        type="file"
+                        id="file"
+                        name="file"
+                        placeholder="Upload an image"
+                        onChange={this.uploadFile}
+                        required
+                      />
+                      {this.state.image && (
+                        <img
+                          width="200"
+                          src={this.state.image}
+                          alt="Upload preview"
+                        />
+                      )}
+                    </label>
+
                     <label htmlFor="title">
                       Title
                       <input
