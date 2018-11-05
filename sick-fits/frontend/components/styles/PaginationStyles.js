@@ -19,7 +19,7 @@ const PaginationStyles = styled.div`
     }
   }
   a[aria-disabled='true'] {
-    color: grey;
+    color: ${props => props.theme.lightgrey};
     pointer-events: none;
   }
 `;
