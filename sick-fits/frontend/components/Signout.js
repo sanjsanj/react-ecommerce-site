@@ -12,12 +12,16 @@ const SIGNOUT_MUTATION = gql`
   }
 `;
 
+const handleConfirm = fn => {
+  if (window.confirm("Are you sure you want to sign out?")) fn();
+};
+
 const Signout = () => (
   <Mutation
     mutation={SIGNOUT_MUTATION}
     refetchQueries={[{ query: CURRENT_USER_QUERY }]}
   >
-    {(signout) => <button onClick={signout}>Sign out</button>}
+    {signout => <button onClick={() => handleConfirm(signout)}>Sign out</button>}
   </Mutation>
 );
 
