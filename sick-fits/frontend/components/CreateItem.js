@@ -46,7 +46,6 @@ class CreateItem extends Component {
   };
 
   uploadFile = async e => {
-    console.log("Uploading file...");
     const files = e.target.files;
 
     const data = new FormData();
@@ -62,7 +61,6 @@ class CreateItem extends Component {
     );
 
     const file = await res.json();
-    console.log(file);
 
     this.setState({
       image: file.secure_url,

@@ -60,18 +60,18 @@ class UpdateItem extends Component {
 
   updateItem = async (e, updateItemMutation) => {
     e.preventDefault();
+
     const res = await updateItemMutation({
       variables: {
         ...this.state,
         id: this.props.id
       }
     });
-    console.log(res);
+    
     return res;
   };
 
   uploadFile = async e => {
-    console.log("Uploading file...");
     const files = e.target.files;
 
     const data = new FormData();
@@ -87,7 +87,6 @@ class UpdateItem extends Component {
     );
 
     const file = await res.json();
-    console.log(file);
 
     this.setState({
       image: file.secure_url,
