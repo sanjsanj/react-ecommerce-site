@@ -69,7 +69,7 @@ class Reset extends Component {
 
                 {!error &&
                   !loading &&
-                  called && <p>Success! Check your email for a reset link</p>}
+                  called && <p>Success! Password reset</p>}
 
                 <label htmlFor="password">
                   Password
