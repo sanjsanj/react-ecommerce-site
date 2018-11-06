@@ -1,6 +1,7 @@
 import { Query } from "react-apollo";
 import Error from "./ErrorMessage";
 import gql from "graphql-tag";
+import PropTypes from "prop-types";
 
 import Table from "./styles/Table";
 import SickButton from "./styles/SickButton";
@@ -49,7 +50,7 @@ const Permissions = props => (
 
           <tbody>
             {data.users.map(user => (
-              <User key={user.id} user={user} />
+              <UserPermissions key={user.id} user={user} />
             ))}
           </tbody>
         </Table>
@@ -58,7 +59,37 @@ const Permissions = props => (
   </Query>
 );
 
-class User extends React.Component {
+class UserPermissions extends React.Component {
+  static propTypes = {
+    user: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      email: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+      permissions: PropTypes.array.isRequired
+    }).isRequired
+  };
+
+  state = {
+    permissions: this.props.user.permissions
+  };
+
+  handlePermissionChange = e => {
+    const { checked, value } = e.target;
+    let updatedPermissions = [...this.state.permissions];
+
+    if (checked) {
+      updatedPermissions.push(value);
+    } else {
+      updatedPermissions = updatedPermissions.filter(
+        permission => permission !== value
+      );
+    }
+
+    this.setState({
+      permissions: updatedPermissions
+    });
+  };
+
   render() {
     const { user } = this.props;
 
@@ -71,8 +102,9 @@ class User extends React.Component {
             <label htmlFor={`${user.id}-permission-${permission}`}>
               <input
                 type="checkbox"
-                disabled
-                checked={user.permissions.includes(permission)}
+                value={permission}
+                checked={this.state.permissions.includes(permission)}
+                onChange={this.handlePermissionChange}
               />
             </label>
           </td>
