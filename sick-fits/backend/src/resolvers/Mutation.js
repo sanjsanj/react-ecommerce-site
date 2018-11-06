@@ -4,10 +4,12 @@ const { randomBytes } = require("crypto");
 const { promisify } = require("util");
 
 const { transport, emailTemplate } = require("../mail");
+const { hasPermission } = require("../utils");
 
 const Mutation = {
   async createItem(parent, args, ctx, info) {
-    if (!ctx.request.userId) throw new Error("You must be logged in to do that");
+    if (!ctx.request.userId)
+      throw new Error("You must be logged in to do that");
 
     const item = await ctx.db.mutation.createItem(
       {
@@ -168,6 +170,36 @@ const Mutation = {
     });
 
     return updatedUser;
+  },
+
+  async updatePermissions(parent, args, ctx, info) {
+    if (!ctx.request.userId)
+      throw new Error("You must be logged in to do that");
+
+    const currentUser = await ctx.db.query.user(
+      {
+        where: {
+          id: ctx.request.userId
+        }
+      },
+      info
+    );
+
+    hasPermission(currentUser, ["ADMIN", "PERMISSIONUPDATE"]);
+
+    return ctx.db.mutation.updateUser(
+      {
+        where: {
+          id: args.userId
+        },
+        data: {
+          permissions: {
+            set: args.permissions
+          }
+        }
+      },
+      info
+    );
   }
 };
 
