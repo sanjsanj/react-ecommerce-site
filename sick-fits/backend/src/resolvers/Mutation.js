@@ -54,7 +54,7 @@ const Mutation = {
     );
 
     if (!ownsItem || !hasPermissions) {
-      throw new Error("You don't have permission to do that")
+      throw new Error("You don't have permission to do that");
     }
 
     return ctx.db.mutation.deleteItem({ where }, info);
@@ -209,6 +209,54 @@ const Mutation = {
       },
       info
     );
+  },
+
+  async addToCart(parent, args, ctx, info) {
+    const { userId } = ctx.request;
+
+    if (!userId) throw new Error("You must be logged in to do that");
+
+    const [existingCartItem] = await ctx.db.query.cartItems(
+      {
+        where: {
+          item: {
+            id: args.id
+          },
+          user: {
+            id: userId
+          }
+        }
+      },
+      info
+    );
+
+    if (existingCartItem) {
+      return ctx.db.mutation.updateCartItem(
+        {
+          where: {
+            id: existingCartItem.id
+          },
+          data: {
+            quantity: existingCartItem.quantity + 1
+          }
+        },
+        info
+      );
+    } else {
+      return ctx.db.mutation.createCartItem(
+        {
+          data: {
+            user: {
+              connect: { id: userId }
+            },
+            item: {
+              connect: { id: args.id }
+            }
+          }
+        },
+        info
+      );
+    }
   }
 };
 
