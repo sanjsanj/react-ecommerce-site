@@ -24,9 +24,18 @@ const BigButton = styled.button`
   }
 `;
 
-class RemoveFromCart extends React.Component {
+class RemoveFromCart extends Component {
   static propTypes = {
     id: PropTypes.string.isRequired
+  };
+
+  update = (cache, payload) => {
+    const data = cache.readQuery({ query: CURRENT_USER_QUERY });
+    const cartItemId = payload.data.removeFromCart.id;
+
+    data.me.cart = data.me.cart.filter(cartItem => cartItem.id !== cartItemId);
+
+    cache.writeQuery({ query: CURRENT_USER_QUERY, data });
   };
 
   render() {
@@ -36,7 +45,14 @@ class RemoveFromCart extends React.Component {
       <Mutation
         mutation={REMOVE_CART_ITEM_MUTATION}
         variables={{ id }}
-        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+        update={this.update}
+        optimisticResponse={{
+          __typename: "Mutation",
+          removeFromCart: {
+            __typename: "CartItem",
+            id: id
+          }
+        }}
       >
         {(removeFromCart, { loading, error }) => (
           <BigButton
