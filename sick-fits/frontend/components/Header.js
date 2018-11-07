@@ -5,16 +5,17 @@ import NProgress from "nprogress";
 
 import Nav from "./Nav";
 import Cart from "./Cart";
+import Search from "./Search";
 
 Router.onRouteChangeStart = () => {
   NProgress.start();
-}
+};
 Router.onRouteChangeComplete = () => {
   NProgress.done();
-}
+};
 Router.onRouteChangeError = () => {
   NProgress.done();
-}
+};
 
 const Logo = styled.h1`
   font-size: 4rem;
@@ -66,7 +67,7 @@ const Header = () => (
     <Nav />
 
     <div className="sub-bar">
-      <p>Search</p>
+      <Search />
     </div>
 
     <Cart />
