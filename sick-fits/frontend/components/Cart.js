@@ -1,6 +1,7 @@
 import React from "react";
 import { Query, Mutation } from "react-apollo";
 import gql from "graphql-tag";
+import { adopt } from "react-adopt";
 
 import CartStyles from "./styles/CartStyles";
 import Supreme from "./styles/Supreme";
@@ -27,49 +28,51 @@ const TOGGLE_CART_MUTATION = gql`
   }
 `;
 
+const Composed = adopt({
+  user: ({ render }) => <User>{render}</User>,
+  toggleCart: ({ render }) => (
+    <Mutation mutation={TOGGLE_CART_MUTATION}>{render}</Mutation>
+  ),
+  localState: ({ render }) => <Query query={LOCAL_STATE_QUERY}>{render}</Query>
+});
+
 const Cart = () => {
   return (
-    <User>
-      {({ data: { me } }) => {
+    <Composed>
+      {({ user, toggleCart, localState }) => {
+        const me = user.data.me;
+        
         if (!me) return null;
 
         return (
-          <Mutation mutation={TOGGLE_CART_MUTATION}>
-            {toggleCart => (
-              <Query query={LOCAL_STATE_QUERY}>
-                {({ data }) => (
-                  <CartStyles open={data.cartOpen}>
-                    <header>
-                      <CloseButton onClick={toggleCart} title="close">
-                        &times;
-                      </CloseButton>
+          <CartStyles open={localState.data.cartOpen}>
+            <header>
+              <CloseButton onClick={toggleCart} title="close">
+                &times;
+              </CloseButton>
 
-                      <Supreme>{formatPossessive(me.name)} Cart</Supreme>
+              <Supreme>{formatPossessive(me.name)} Cart</Supreme>
 
-                      <p>
-                        You have {me.cart.length}{" "}
-                        {formatPlural(me.cart, "Item")} in your Cart
-                      </p>
-                    </header>
+              <p>
+                You have {me.cart.length} {formatPlural(me.cart, "Item")} in
+                your Cart
+              </p>
+            </header>
 
-                    <ul>
-                      {me.cart.map(cartItem => (
-                        <CartItem key={cartItem.id} cartItem={cartItem} />
-                      ))}
-                    </ul>
+            <ul>
+              {me.cart.map(cartItem => (
+                <CartItem key={cartItem.id} cartItem={cartItem} />
+              ))}
+            </ul>
 
-                    <footer>
-                      <p>{formatMoney(calcTotalPrice(me.cart))}</p>
-                      <SickButton>Checkout</SickButton>
-                    </footer>
-                  </CartStyles>
-                )}
-              </Query>
-            )}
-          </Mutation>
+            <footer>
+              <p>{formatMoney(calcTotalPrice(me.cart))}</p>
+              <SickButton>Checkout</SickButton>
+            </footer>
+          </CartStyles>
         );
       }}
-    </User>
+    </Composed>
   );
 };
 
