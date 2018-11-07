@@ -46,6 +46,10 @@ type Mutation {
   addToCart(
     id: ID!
   ): CartItem
+
+  removeFromCart(
+    id: ID!
+  ): CartItem
 }
 
 type Query {
