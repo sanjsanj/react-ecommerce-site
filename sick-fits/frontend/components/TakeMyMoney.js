@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import StripeCheckout from "react-stripe-checkout";
 import { Mutation } from "react-apollo";
 import Router from "next/router";
@@ -10,6 +9,7 @@ import calcTotalPrice from "../lib/calcTotalPrice";
 
 import Error from "./ErrorMessage";
 import User, { CURRENT_USER_QUERY } from "./User";
+import Order from "../pages/order";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation CREATE_ORDER_MUTATION($token: String!) {
@@ -30,13 +30,17 @@ class TakeMyMoney extends React.Component {
     return cart.reduce((acc, cartItem) => acc + cartItem.quantity, 0);
   }
 
-  onToken(res, createOrder) {
-    console.log(res);
-    createOrder({
+  async onToken(res, createOrder) {
+    const order = await createOrder({
       variables: {
         token: res.id
       }
     }).catch(err => alert(err.message));
+
+    Router.push({
+      pathname: "/order",
+      query: { id: order.data.createOrder.id }
+    });
   }
 
   render() {

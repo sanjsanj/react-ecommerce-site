@@ -62,6 +62,8 @@ type Query {
   me: User
 
   users: [User]!
+
+  order(id: ID!): Order
 }
 
 type User {
