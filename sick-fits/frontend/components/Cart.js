@@ -42,7 +42,7 @@ const Cart = () => {
     <Composed>
       {({ user, toggleCart, localState }) => {
         const me = user.data.me;
-        
+
         if (!me) return null;
 
         return (
@@ -69,9 +69,11 @@ const Cart = () => {
             <footer>
               <p>{formatMoney(calcTotalPrice(me.cart))}</p>
 
-              <TakeMyMoney>
-                <SickButton>Checkout</SickButton>
-              </TakeMyMoney>
+              {me.cart.length && (
+                <TakeMyMoney>
+                  <SickButton>Checkout</SickButton>
+                </TakeMyMoney>
+              )}
             </footer>
           </CartStyles>
         );
