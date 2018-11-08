@@ -1,4 +1,5 @@
 import { shallow } from "enzyme";
+import toJSON from "enzyme-to-json";
 
 import ItemComponent from "../components/Item";
 
@@ -13,7 +14,11 @@ const fakeItem = {
 
 describe("<Item />", () => {
   it("renders properly", () => {
+    shallow(<ItemComponent item={fakeItem} />);
+  });
+  
+  it("matches snapshot", () => {
     const wrapper = shallow(<ItemComponent item={fakeItem} />);
-    expect(wrapper.exists()).toEqual(true);
+    expect(toJSON(wrapper)).toMatchSnapshot();
   });
 });
