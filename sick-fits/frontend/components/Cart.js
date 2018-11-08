@@ -11,10 +11,11 @@ import SickButton from "./styles/SickButton";
 import { formatPossessive } from "../lib/formatPossessive";
 import { formatPlural } from "../lib/formatPlural";
 import calcTotalPrice from "../lib/calcTotalPrice";
+import formatMoney from "../lib/formatMoney";
 
 import User from "./User";
 import CartItem from "./CartItem";
-import formatMoney from "../lib/formatMoney";
+import TakeMyMoney from "./TakeMyMoney";
 
 const LOCAL_STATE_QUERY = gql`
   query {
@@ -67,7 +68,10 @@ const Cart = () => {
 
             <footer>
               <p>{formatMoney(calcTotalPrice(me.cart))}</p>
-              <SickButton>Checkout</SickButton>
+
+              <TakeMyMoney>
+                <SickButton>Checkout</SickButton>
+              </TakeMyMoney>
             </footer>
           </CartStyles>
         );
