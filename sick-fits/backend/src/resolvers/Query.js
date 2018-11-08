@@ -53,6 +53,18 @@ const Query = {
       throw new Error("You don't have permission to view this");
 
     return order;
+  },
+
+  async orders(parent, args, ctx, info) {
+    if (!ctx.request.userId) throw new Error("Must be logged in");
+
+    return ctx.db.query.orders({
+      where: {
+        user: {
+          id: ctx.request.userId
+        }
+      }
+    }, info);
   }
 };
 
