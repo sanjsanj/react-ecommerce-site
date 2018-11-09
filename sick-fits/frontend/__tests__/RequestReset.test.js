@@ -39,7 +39,7 @@ describe("<RequestReset />", () => {
 
   it("calls the mutation", async () => {
     const wrapper = mount(
-      <MockedProvider>
+      <MockedProvider mocks={mocks}>
         <RequestReset />
       </MockedProvider>
     );

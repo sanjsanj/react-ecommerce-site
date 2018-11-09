@@ -37,9 +37,7 @@ class RequestReset extends Component {
               method="POST"
               onSubmit={async e => {
                 e.preventDefault();
-
-                const res = await reset();
-                console.log(res);
+                await reset();
 
                 this.setState({
                   email: ""
