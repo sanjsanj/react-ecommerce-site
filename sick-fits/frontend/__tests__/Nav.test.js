@@ -94,7 +94,7 @@ describe("<Nav />", () => {
 
     const nav = wrapper.find('[data-test="nav"]');
     const count = nav.find("div.count");
-    
+
     expect(count.text()).toEqual("3");
     expect(toJSON(count)).toMatchSnapshot();
   });
